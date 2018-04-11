@@ -39,6 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'corsheaders',
+    'graphene_django',
 ]
 
 MIDDLEWARE = [
@@ -116,6 +118,14 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+# graphene_django settings
+
+GRAPHENE = {
+    'SCHEMA': 'api.schema.schema',
+}
+
 # Cross origin
 
 CORS_ORIGIN_WHITELIST = []
+
+CORS_ALLOW_CREDENTIALS = True
