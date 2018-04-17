@@ -1,4 +1,3 @@
-from graphql_jwt.exceptions import GraphQLJWTError
 from graphene_django.views import GraphQLView
 from .exceptions import APIError
 
@@ -11,8 +10,6 @@ class CustomGraphQLView(GraphQLView):
             formatted = {"message": str(error.original_error)}
             if isinstance(error.original_error, APIError):
                 formatted['code'] = error.original_error.code
-            elif isinstance(error.original_error, GraphQLJWTError):
-                formatted['code'] = 401
             return formatted
 
         return GraphQLView.format_error(error)

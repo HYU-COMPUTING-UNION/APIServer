@@ -1,3 +1,6 @@
+from django.utils.translation import gettext_lazy as _
+
+
 class APIError(Exception):
 
     @property
@@ -6,7 +9,7 @@ class APIError(Exception):
 
 
 class AlreadyExistedError(APIError):
-    def __init__(self, message='already existed', code=409):
+    def __init__(self, message=_('already existed'), code=409):
         super().__init__(message)
         self._code = code
 
@@ -16,7 +19,17 @@ class AlreadyExistedError(APIError):
 
 
 class InvalidInputError(APIError):
-    def __init__(self, message="invalid input", code=400):
+    def __init__(self, message=_('invalid input'), code=400):
+        super().__init__(message)
+        self._code = code
+
+    @property
+    def code(self):
+        return self._code
+
+
+class AuthError(APIError):
+    def __init__(self, message=_('login required'), code=401):
         super().__init__(message)
         self._code = code
 

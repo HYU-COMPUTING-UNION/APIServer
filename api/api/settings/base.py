@@ -39,13 +39,16 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_extensions',
     'corsheaders',
     'graphene_django',
+    'social_django',
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -98,6 +101,16 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+# Authentication Backend
+# https://docs.djangoproject.com/en/2.0/ref/settings/#authentication-backends
+
+AUTHENTICATION_BACKENDS = [
+    'social_core.backends.facebook.FacebookOAuth2',
+    'social_core.backends.google.GoogleOAuth2',
+    'social_core.backends.kakao.KakaoOAuth2',
+    'api.backends.naver.MyNaverOAuth2',
+    'django.contrib.auth.backends.ModelBackend',
+]
 
 # Internationalization
 # https://docs.djangoproject.com/en/2.0/topics/i18n/
@@ -129,3 +142,17 @@ GRAPHENE = {
 CORS_ORIGIN_WHITELIST = []
 
 CORS_ALLOW_CREDENTIALS = True
+
+# Python-Social-Auth settings
+
+SOCIAL_AUTH_FACEBOOK_KEY = ''
+SOCIAL_AUTH_FACEBOOK_SECRET = ''
+
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = ''
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = ''
+
+SOCIAL_AUTH_KAKAO_KEY = ''
+SOCIAL_AUTH_KAKAO_SECRET = ''
+
+SOCIAL_AUTH_NAVER_KEY = ''
+SOCIAL_AUTH_NAVER_SECRET = ''

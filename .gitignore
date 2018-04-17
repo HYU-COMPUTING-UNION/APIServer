@@ -7,5 +7,8 @@
 # compiled python source
 __pycache__/
 
+# ftpconfig
+.ftpconfig
+
 # database file
 db.sqlite3
