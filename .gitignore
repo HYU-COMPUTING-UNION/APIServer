@@ -12,3 +12,6 @@ __pycache__/
 
 # database file
 db.sqlite3
+
+# vscode
+.vscode
