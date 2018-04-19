@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'graphene_django',
     'social_django',
     'accounts',
+    'petitions',
 ]
 
 MIDDLEWARE = [
