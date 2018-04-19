@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'graphene_django',
     'social_django',
+    'accounts',
 ]
 
 MIDDLEWARE = [
@@ -130,6 +131,10 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.0/howto/static-files/
 
 STATIC_URL = '/static/'
+
+# Custom auth model
+
+AUTH_USER_MODEL = 'accounts.User'
 
 # graphene_django settings
 
