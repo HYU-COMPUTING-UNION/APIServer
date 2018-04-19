@@ -1,12 +1,9 @@
 [[source]]
-
 url = "https://pypi.python.org/simple"
 verify_ssl = true
 name = "pypi"
 
-
 [packages]
-
 django = "*"
 django-filter = "*"
 graphene = "*"
@@ -16,8 +13,6 @@ django-cors-headers = "*"
 gunicorn = "*"
 django-graphql-social-auth = "*"
 
-
 [dev-packages]
-
 pygraphviz = "*"
 "flake8" = "*"
