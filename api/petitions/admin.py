@@ -18,7 +18,8 @@ class PetitionAdmin(admin.ModelAdmin):
     search_fields = ['title', 'content', 'issuer_name']
     list_display = [
         'title', 'content', 'issuer_name', 'issued_at',
-        'expired_at', 'answered_at', 'is_in_progress',
+        'expired_at', 'answered_at', 'assentient_count',
+        'is_in_progress',
     ]
 
     def issuer_name(self, obj):
