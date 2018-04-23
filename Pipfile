@@ -16,3 +16,4 @@ django-graphql-social-auth = "*"
 [dev-packages]
 pygraphviz = "*"
 "flake8" = "*"
+yapf = "*"
