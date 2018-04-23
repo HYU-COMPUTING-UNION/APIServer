@@ -1,13 +1,19 @@
 import graphene
 
 from api.decorators import login_required, method_decorator
+from api.exceptions import InvalidInputError
+
+
 from api.types import CountingObjectType
 
 from accounts.decorators import auth_required
 
+from django.utils.translation import gettext_lazy as _
+
 from graphene_django import DjangoObjectType
 from graphene_django.filter import DjangoFilterConnectionField
 
+from graphql_relay import from_global_id
 
 from .models import Petition, Answer, Category
 
@@ -48,16 +54,35 @@ class CreatePetition(graphene.relay.ClientIDMutation):
     class Input:
         title = graphene.String(required=True)
         content = graphene.String(required=True)
+        category_id = graphene.ID()
 
     @method_decorator(login_required)
     @method_decorator(auth_required)
     def mutate_and_get_payload(self, info, **input):
         title = input.get('title')
         content = input.get('content')
+        category_id = input.get('category_id')
         issuer = info.context.user.profile
+
+        if category_id is not None:
+            type_name, _id = from_global_id(category_id)
+
+            if type_name != 'CategoryNode':
+                raise InvalidInputError(message=_('categoryId is not valid'))
+
+            try:
+                category = Category.objects.get(pk=_id)
+            except Category.DoesNotExist:
+                raise InvalidInputError(message=_('categoryId is not valid'))
+        else:
+            category = None
 
         petition = Petition(title=title, content=content, issuer=issuer)
         petition.save()
+
+        if category is not None:
+            petition.categories.add(category)
+
         return CreatePetition(petition=petition)
 
 
