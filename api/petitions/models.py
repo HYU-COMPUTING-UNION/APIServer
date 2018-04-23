@@ -23,6 +23,9 @@ class Category(models.Model):
 
 
 class Petition(models.Model):
+    class Meta:
+        ordering = ['-issued_at']
+
     issuer = models.ForeignKey(
         'accounts.Profile',
         on_delete=models.CASCADE,
