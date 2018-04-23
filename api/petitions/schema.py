@@ -1,6 +1,8 @@
 import graphene
 
 from api.decorators import login_required, method_decorator
+from api.types import CountingObjectType
+
 from accounts.decorators import auth_required
 
 from graphene_django import DjangoObjectType
@@ -12,11 +14,16 @@ from .models import Petition, Answer, Category
 
 # ObjectTypes
 
-class PetitionNode(DjangoObjectType):
+class PetitionNode(CountingObjectType):
+    assentient_count = graphene.Int(required=True, source='assentient_count')
+    is_expired = graphene.Boolean(required=True, source='is_expired')
+    is_answered = graphene.Boolean(required=True, source='is_answered')
+
     class Meta:
         model = Petition
         interfaces = (graphene.relay.Node, )
         filter_fields = []
+        exclude_fields = ['issuer', 'assentients']
 
 
 class AnswerNode(DjangoObjectType):
