@@ -3,7 +3,6 @@ import graphene
 from api.decorators import login_required, method_decorator
 from api.exceptions import InvalidInputError
 
-
 from api.types import CountingObjectType
 
 from accounts.decorators import auth_required
@@ -17,8 +16,8 @@ from graphql_relay import from_global_id
 
 from .models import Petition, Answer, Category
 
-
 # ObjectTypes
+
 
 class PetitionNode(CountingObjectType):
     assentient_count = graphene.Int(required=True, source='assentient_count')
@@ -47,6 +46,7 @@ class CategoryNode(DjangoObjectType):
 
 
 # Mutation fields
+
 
 class CreatePetition(graphene.relay.ClientIDMutation):
     petition = graphene.Field(PetitionNode)
@@ -115,10 +115,24 @@ class AgreePetition(graphene.relay.ClientIDMutation):
 
 # Query and Mutation
 
+
 class Query:
-    petitions = DjangoFilterConnectionField(PetitionNode)
+    petitions = DjangoFilterConnectionField(
+        PetitionNode,
+        is_answered=graphene.Boolean(),
+    )
     answers = DjangoFilterConnectionField(AnswerNode)
     categories = DjangoFilterConnectionField(CategoryNode)
+
+    def resolve_petitions(self, info, **input):
+        is_answered = input.get('is_answered')
+        if is_answered is None:
+            return Petition.objects.all()
+        else:
+            return [
+                p for p in Petition.objects.all()
+                if p.is_answered == is_answered
+            ]
 
 
 class Mutation:
