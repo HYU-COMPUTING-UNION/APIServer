@@ -86,6 +86,33 @@ class CreatePetition(graphene.relay.ClientIDMutation):
         return CreatePetition(petition=petition)
 
 
+class AgreePetition(graphene.relay.ClientIDMutation):
+    state = graphene.Boolean(required=True)
+
+    class Input:
+        petition_id = graphene.ID(required=True)
+
+    @method_decorator(login_required)
+    @method_decorator(auth_required)
+    def mutate_and_get_payload(self, info, **input):
+        petition_id = input.get('petition_id')
+        user = info.context.user.profile
+
+        type_name, _id = from_global_id(petition_id)
+
+        if type_name != 'PetitionNode':
+            raise InvalidInputError(message=_('petitionId is not valid'))
+
+        try:
+            petition = Petition.objects.get(pk=_id)
+        except Petition.DoesNotExist:
+            raise InvalidInputError(message=_('petitionId is not valid'))
+
+        petition.assentients.add(user)
+
+        return AgreePetition(state=True)
+
+
 # Query and Mutation
 
 class Query:
@@ -96,3 +123,4 @@ class Query:
 
 class Mutation:
     create_petition = CreatePetition.Field()
+    agree_petition = AgreePetition.Field()
