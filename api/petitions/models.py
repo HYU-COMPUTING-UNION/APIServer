@@ -65,7 +65,7 @@ class Petition(models.Model):
         return self.assentients.count()
 
     @property
-    def is_expried(self):
+    def is_expired(self):
         return timezone.now().date() > self.expired_at
 
     @property
