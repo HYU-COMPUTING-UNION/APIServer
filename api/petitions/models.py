@@ -70,7 +70,7 @@ class Petition(models.Model):
 
     @property
     def is_answered(self):
-        return self.answer is not None
+        return hasattr(self, 'answer') and self.answer is not None
 
 
 class Answer(models.Model):
