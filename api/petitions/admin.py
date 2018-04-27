@@ -7,7 +7,7 @@ from .models import Category, Petition, Answer
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
     search_fields = ['name']
-    list_display = ['name', 'parent_name']
+    list_display = ['name', 'parent_name', 'order']
 
     def parent_name(self, obj):
         return obj.parent.name if obj.parent is not None else _('None')

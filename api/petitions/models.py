@@ -8,8 +8,10 @@ from django.utils import timezone
 class Category(models.Model):
     class Meta:
         verbose_name_plural = 'categories'
+        ordering = ['order']
 
     name = models.CharField(max_length=50)
+    order = models.PositiveIntegerField(unique=True)
     parent = models.ForeignKey(
         'self',
         related_name='sub_categories',
