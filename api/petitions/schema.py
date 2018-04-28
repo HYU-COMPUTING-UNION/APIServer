@@ -30,6 +30,9 @@ class PetitionNode(CountingObjectType):
         filter_fields = []
         exclude_fields = ['issuer', 'assentients']
 
+    def resolve_issued_at(self, *args, **kwargs):
+        return self.issued_at.date()
+
 
 class AnswerNode(DjangoObjectType):
     class Meta:

@@ -45,7 +45,7 @@ class Petition(models.Model):
     )
     title = models.CharField(max_length=255)
     content = models.TextField()
-    issued_at = models.DateField(auto_now_add=True)
+    issued_at = models.DateTimeField(auto_now_add=True)
     expired_at = models.DateField(blank=True)
     is_in_progress = models.BooleanField(default=False)
 
