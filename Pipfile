@@ -12,6 +12,7 @@ django-extensions = "*"
 django-cors-headers = "*"
 gunicorn = "*"
 django-graphql-social-auth = "*"
+celery = "*"
 
 [dev-packages]
 pygraphviz = "*"
