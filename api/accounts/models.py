@@ -2,20 +2,10 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 
 
-class AffiliationAuth(models.Model):
-    """Student data related to authentication of affiliation"""
-    name = models.CharField(max_length=255)
-    student_id = models.CharField(max_length=255, unique=True)
-
-    def __str__(self):
-        return self.name
-
-
 class Profile(models.Model):
     """Profile model"""
     name = models.CharField(max_length=255)
-    student_id = models.CharField(max_length=255)
-    is_affiliation_authenticated = models.BooleanField(default=False)
+    email = models.EmailField(unique=True)
 
     def __str__(self):
         return '%s' % self.name
@@ -31,6 +21,19 @@ class User(AbstractUser):
     )
 
     @property
-    def is_affiliation_authenticated(self):
-        return (self.profile is not None
-                and self.profile.is_affiliation_authenticated)
+    def is_email_authenticated(self):
+        try:
+            return self.email_auth.is_email_authenticated
+        except EmailAuth.DoesNotExist:
+            return False
+
+
+class EmailAuth(models.Model):
+    user = models.OneToOneField(
+        User,
+        on_delete=models.CASCADE,
+        related_name='email_auth',
+        primary_key=True,
+    )
+    token = models.CharField(max_length=255, unique=True)
+    is_email_authenticated = models.BooleanField(default=False)
