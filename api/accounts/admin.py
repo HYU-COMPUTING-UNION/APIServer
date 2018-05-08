@@ -30,8 +30,8 @@ class UserAdmin(AuthUserAdmin):
 
 @admin.register(EmailAuth)
 class EmailAuthAdmin(admin.ModelAdmin):
-    search_fields = ['user__name']
+    search_fields = ['user__profile__name']
     list_display = ['user_name', 'token', 'is_email_authenticated']
 
     def user_name(self, obj):
-        return obj.user.name
+        return obj.user.profile.name
