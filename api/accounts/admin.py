@@ -1,20 +1,16 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as AuthUserAdmin
-from .models import AffiliationAuth, User, Profile
-
-
-@admin.register(AffiliationAuth)
-class AffiliationAuthAdmin(admin.ModelAdmin):
-    search_fields = ['name', 'student_id']
-    list_display = ['name', 'student_id']
+from .models import User, Profile, EmailAuth
 
 
 @admin.register(Profile)
 class ProfileAdmin(admin.ModelAdmin):
     search_fields = ['name', 'student_id']
-    list_display = ['name', 'student_id', 'is_affiliation_authenticated',
-                    'associate_users']
-    list_filter = ['is_affiliation_authenticated']
+    list_display = [
+        'name',
+        'email',
+        'associate_users',
+    ]
 
     def associate_users(self, obj):
         return obj.users.count()
@@ -25,7 +21,17 @@ class UserAdmin(AuthUserAdmin):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         fieldsets = list(self.fieldsets)
-        fieldsets.insert(1,
-            ('Profile', {'fields': ['profile']}),   # noqa
+        fieldsets.insert(
+            1,
+            ('Profile', {'fields': ['profile']}),
         )
         self.fieldsets = fieldsets
+
+
+@admin.register(EmailAuth)
+class EmailAuthAdmin(admin.ModelAdmin):
+    search_fields = ['user__name']
+    list_display = ['user_name', 'token', 'is_email_authenticated']
+
+    def user_name(self, obj):
+        return obj.user.name
