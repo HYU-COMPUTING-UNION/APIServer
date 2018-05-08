@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/2.0/ref/settings/
 """
 
 import os
+import json
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -162,3 +163,17 @@ SOCIAL_AUTH_KAKAO_SECRET = ''
 
 SOCIAL_AUTH_NAVER_KEY = ''
 SOCIAL_AUTH_NAVER_SECRET = ''
+
+# Celery settings
+
+CELERY_BROKER_URL = 'pyamqp://'
+
+# Email settings
+
+EMAIL_HOST = 'mail.hycomputing.org'
+EMAIL_USE_TLS = True
+
+with open(os.path.join(BASE_DIR, 'secret.json')) as secret_file:
+    secret = json.load(secret_file)
+    EMAIL_HOST_USER = secret['base']['EMAIL_HOST_USER']
+    EMAIL_HOST_PASSWORD = secret['base']['EMAIL_HOST_PASSWORD']
