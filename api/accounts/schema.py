@@ -81,7 +81,6 @@ class Logout(graphene.relay.ClientIDMutation):
 
     @method_decorator(login_required)
     def mutate_and_get_payload(self, info, **input):
-        # send_confirmation_mail.delay(['realappsdev@gmail.com'])
         logout(info.context)
         return Logout(state=True)
 
@@ -130,6 +129,25 @@ class SendEmailAuth(graphene.relay.ClientIDMutation):
         return SendEmailAuth(state=True)
 
 
+class AuthenticateEmail(graphene.relay.ClientIDMutation):
+    state = graphene.Boolean(required=True)
+
+    class Input:
+        token = graphene.String(required=True)
+
+    def mutate_and_get_payload(self, info, **input):
+        token = input.get('token')
+
+        try:
+            email_auth = EmailAuth.objects.get(token=token)
+            email_auth.is_email_authenticated = True
+            email_auth.save()
+            return AuthenticateEmail(state=True)
+
+        except EmailAuth.DoesNotExist:
+            raise InvalidInputError(message=_('invalid token'))
+
+
 # Query and Mutation
 
 
@@ -146,3 +164,4 @@ class Mutation:
     logout = Logout.Field()
     login = Login.Field()
     send_email_auth = SendEmailAuth.Field()
+    authenticate_email = AuthenticateEmail.Field()
