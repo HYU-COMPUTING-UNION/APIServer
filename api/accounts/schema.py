@@ -122,7 +122,7 @@ class SendEmailAuth(graphene.relay.ClientIDMutation):
         send_confirmation_mail.delay(
             '이메일 확인',
             message,
-            from_email='no-reply@hycomputing.org',
+            from_email='한양소융 <no-reply@hycomputing.org>',
             recipients=[email],
         )
 
